@@ -26,7 +26,6 @@ def get_hh_salary_statistic(language):
             "area":"1",
             "period":"30",
             "text": f"Программист{language}",
-            "text": "Програмист Python",
             "only_with_salary": True,
             "page":page
     }
@@ -52,7 +51,6 @@ def get_hh_salary_statistic(language):
         "vacancies_processed": vacancies_processed,
         "average_salary": average_salary
     }
-
 
 
 def get_sj_salary_statistic(language):
