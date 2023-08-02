@@ -19,16 +19,19 @@ def predict_salary(salary_from, salary_to, salary_currency):
 def get_hh_salary_statistic(language):
     salaries = []
     url = 'https://api.hh.ru/vacancies'
+    area = 1
+    period = 30
+    professional_role = 96
     for page in count(0):
         payload = {
             "User-Agent": User-Agent 
-            "professional_role": "96",
-            "area":"1",
-            "period":"30",
+            "professional_role":professional_role,
+            "town":area,
+            "period":period,
             "text": f"Программист{language}",
             "only_with_salary": True,
             "page":page
-    }
+        }
         response = requests.get(url, params=payload)
         response.raise_for_status()
         vacancy_response = response.json()
@@ -56,26 +59,27 @@ def get_hh_salary_statistic(language):
 def get_sj_salary_statistic(language):
     sj_salaries =[]
     url = "https://api.superjob.ru/2.0/vacancies/"
+    town_id = 4
     headers = {
         "X-Api-App-Id" : sj_key
     }
     for page in count(0):
         sj_payload = {
-        "town_id" : 4,
-        "keyword": "программист",
+        "town" : town_id,
+        "keyword": f"Программист{language}",
         "page" : page
-    }
-    sj_response = requests.get(url, params=sj_payload, headers=headers)
-    sj_response.raise_for_status()
-    sj_vacancies = sj_response.json()
-    vacancies_found = sj_vacancies["total"]
-    for vacancy in sj_vacancies["objects"]:
-        salary_from = vacancy["payment_from"]
-        salary_to = vacancy["payment_to"]
-        salary_currency = vacancy["currency"]
-        sj_salary = predict_salary(salary_from, salary_to, salary_currency)
-        if sj_salary:
-            sj_salaries.append(sj_salary)
+        }
+        sj_response = requests.get(url, params=sj_payload, headers=headers)
+        sj_response.raise_for_status()
+        sj_vacancies = sj_response.json()
+        vacancies_found = sj_vacancies["total"]
+        for vacancy in sj_vacancies["objects"]:
+            salary_from = vacancy["payment_from"]
+            salary_to = vacancy["payment_to"]
+            salary_currency = vacancy["currency"]
+            sj_salary = predict_salary(salary_from, salary_to, salary_currency)
+            if sj_salary:
+                sj_salaries.append(sj_salary)
         if not sj_vacancies["more"]:
             break
     vacancies_processed = len(sj_salaries)
