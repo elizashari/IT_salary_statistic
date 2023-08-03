@@ -65,9 +65,9 @@ def get_sj_salary_statistic(language):
     }
     for page in count(0):
         sj_payload = {
-        "town" : town_id,
-        "keyword": f"Программист{language}",
-        "page" : page
+            "town" : town_id,
+            "keyword": f"Программист{language}",
+            "page" : page
         }
         sj_response = requests.get(url, params=sj_payload, headers=headers)
         sj_response.raise_for_status()
